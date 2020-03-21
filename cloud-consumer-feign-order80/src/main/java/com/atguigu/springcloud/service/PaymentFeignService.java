@@ -18,4 +18,7 @@ public interface PaymentFeignService {
 
     @GetMapping(value = "/payment/get/{id}")//指定调用哪个地址,必须对应上
     CommonResult getPaymentById(@PathVariable("id") Long id);
+
+    @GetMapping("/payment/feign/timeout")
+    String paymentFeignTimeout();
 }
