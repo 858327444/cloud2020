@@ -40,6 +40,7 @@ public class MyLB implements LoadBalancer {
         if (CollectionUtils.isEmpty(serviceInstanceList)) {
             return null;
         }
+        // rest接口第几次请求数 % 服务器集群总数量 = 实际调用服务器位置下标,每次服务重启后rest接口计数从1开始
         int index = getAndIncrement() % serviceInstanceList.size();
         return serviceInstanceList.get(index);
     }
