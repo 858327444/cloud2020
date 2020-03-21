@@ -46,4 +46,10 @@ public class PaymentController {
             return new CommonResult(444, "没有对应记录,查询ID：" + id, null);
         }
     }
+
+    @GetMapping("/getServerPort")
+    public String getServerPort() {
+        return serverPort;
+    }
+
 }
