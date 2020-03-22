@@ -1,5 +1,6 @@
 package com.atguigu.springcloud.service;
 
+import cn.hutool.core.util.IdUtil;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 import org.springframework.stereotype.Service;
@@ -46,6 +47,29 @@ public class PaymentServiceImpl implements PaymentService {
     // paymentInfoTimeoutHandler这个方法必须要与paymentInfoTimeout的参数保持一致,否则报错
     private String paymentInfoTimeoutHandler(Integer id) {
         return "线程名字: "+ Thread.currentThread().getName() + " 系统繁忙或系统出现错误 id: "+ id + " paymentInfoTimeoutHandler ,o(╥﹏╥)o";
+    }
+
+
+
+    // 熔断  @HystrixProperty里面的内容是从HystrixCommandProperties类中找到的
+    // 下面的意思是  10次请求在10秒内,如果失败率达到60%,即开始熔断,熔断后正确的请求也不会立刻响应,而是缓慢,正确率高的时候才响应
+    @Override
+    @HystrixCommand(fallbackMethod = "paymentCircuitBreakerHandler",commandProperties = {
+            @HystrixProperty(name = "circuitBreaker.enabled",value = "true"),//是否开启熔断器
+            @HystrixProperty(name = "circuitBreaker.requestVolumeThreshold",value = "10"),//请求次数
+            @HystrixProperty(name = "circuitBreaker.sleepWindowInMilliseconds",value = "10000"),//时间窗口期
+            @HystrixProperty(name = "circuitBreaker.errorThresholdPercentage",value = "60"),//失败率达到多少后开始熔断
+    })
+    public String paymentCircuitBreaker(Integer id) {
+        if (id < 0) {
+            throw new RuntimeException("id 不能为负数" );
+        }
+        String number = IdUtil.simpleUUID();
+        return Thread.currentThread().getName() + " paymentCircuitBreaker  number : " + number;
+    }
+
+    private String paymentCircuitBreakerHandler(Integer id) {
+        return "paymentCircuitBreakerHandler o(╥﹏╥)o id :" + id;
     }
 
 
