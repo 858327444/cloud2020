@@ -31,7 +31,7 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     @HystrixCommand(fallbackMethod = "paymentInfoTimeoutHandler",commandProperties = {
             //设置这个线程的超时时间是3s，3s内是正常的业务逻辑，超过3s调用fallbackMethod指定的方法进行处理
-            @HystrixProperty(name="execution.isolation.thread.timeoutInMilliseconds",value="3000")
+            @HystrixProperty(name="execution.isolation.thread.timeoutInMilliseconds",value="3000"),
     })
     public String paymentInfoTimeout(Integer id) {
         int timeNumber = 5;
@@ -43,6 +43,7 @@ public class PaymentServiceImpl implements PaymentService {
         return  "线程名字: "+ Thread.currentThread().getName() + " id: "+ id + " paymentInfoTimeout ,耗时(秒):" + timeNumber;
     }
 
+    // paymentInfoTimeoutHandler这个方法必须要与paymentInfoTimeout的参数保持一致,否则报错
     private String paymentInfoTimeoutHandler(Integer id) {
         return "线程名字: "+ Thread.currentThread().getName() + " id: "+ id + " paymentInfoTimeoutHandler ,o(╥﹏╥)o";
     }
