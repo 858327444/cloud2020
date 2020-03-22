@@ -1,6 +1,6 @@
 package com.atguigu.springcloud.controller;
 
-import com.atguigu.springcloud.service.PaymentService;
+import com.atguigu.springcloud.service.PaymentHystrixService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,23 +17,24 @@ import javax.annotation.Resource;
  */
 @RestController
 @Slf4j
-public class PaymentController {
+public class OrderHystrixController {
     @Resource
-    private PaymentService paymentService;
+    private PaymentHystrixService paymentHystrixService;
 
 
-    @GetMapping("/payment/hystrix/ok/{id}")
+    @GetMapping("/consumer/payment/hystrix/ok/{id}")
     public String paymentInfoOK(@PathVariable("id") Integer id) {
-        String result = paymentService.paymentInfoOK(id);
+        String result = paymentHystrixService.paymentInfoOK(id);
         log.info(result);
         return result;
     }
 
-    @GetMapping("/payment/hystrix/timeout/{id}")
+    @GetMapping("/consumer/payment/hystrix/timeout/{id}")
     public String paymentInfoTimeout(@PathVariable("id")Integer id) {
-        log.info("11111111111111");
-        String result = paymentService.paymentInfoTimeout(id);
+        String result = paymentHystrixService.paymentInfoTimeout(id);
         log.info(result);
         return result;
     }
+
+
 }
