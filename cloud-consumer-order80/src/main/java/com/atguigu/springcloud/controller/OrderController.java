@@ -46,12 +46,12 @@ public class OrderController {
         return restTemplate.getForObject(PAYMENT_URL + "/payment/get/" + id,CommonResult.class);
     }
 
-    @GetMapping("/payment/getServerPort")
-    public String getServerPort() {
+    @GetMapping("/payment/lb")
+    public String lb() {
         List<ServiceInstance> instanceList = discoveryClient.getInstances("CLOUD-PAYMENT-SERVICE");
         ServiceInstance instances = loadBalancer.getInstance(instanceList);
         URI uri = instances.getUri();
-        return restTemplate.getForObject(uri + "/payment/getServerPort",String.class);
+        return restTemplate.getForObject(uri + "/payment/lb",String.class);
     }
 
 
