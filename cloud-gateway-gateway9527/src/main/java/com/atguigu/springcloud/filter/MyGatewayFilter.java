@@ -25,7 +25,7 @@ public class MyGatewayFilter implements GlobalFilter, Ordered {
         // 例如 http://localhost:9527/payment/lb?uname=123456,这种请求可以访问进来
         String uname = exchange.getRequest().getQueryParams().getFirst("uname");
         if (StringUtils.isBlank(uname)) {
-            log.info("用户ing为空,o(╥﹏╥)o");
+            log.info("用户名为空,o(╥﹏╥)o");
             exchange.getResponse().setStatusCode(HttpStatus.NOT_ACCEPTABLE);
             return exchange.getResponse().setComplete();
         }
